@@ -1,4 +1,4 @@
-package dev.codescreen;
+package dev.codescreen.schemas;
 
 public class AuthorizationResponse extends Response {
 

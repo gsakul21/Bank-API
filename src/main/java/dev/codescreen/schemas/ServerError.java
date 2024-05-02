@@ -1,5 +1,4 @@
-package dev.codescreen;
-
+package dev.codescreen.schemas;
 public class ServerError extends Error {
 
     public ServerError(String message)
