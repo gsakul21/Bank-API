@@ -1,13 +1,12 @@
 # Data Source Configuration
 spring:
   datasource:
-    url: jdbc:h2:file:~/test
-    username: sa
-    password: password
-    driver-class-name: org.h2.Driver
+    url: jdbc:sqlite:./data/demo.db
+    driver-class-name: org.sqlite.JDBC
   
 # Hibernate Auto DDL Configuration
 spring:
   jpa:
+    database-platform: org.hibernate.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
