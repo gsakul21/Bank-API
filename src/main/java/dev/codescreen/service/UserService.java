@@ -1,7 +1,5 @@
 package dev.codescreen.service;
 
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Service;
 import dev.codescreen.domain.User;
 import dev.codescreen.repository.UserRepository;
@@ -21,10 +19,11 @@ public class UserService {
     {
         try
         {
-            return userRepository.getOne(userId);
+            return userRepository.getReferenceById(userId);
         }
         catch(EntityNotFoundException e)
         {
+            System.out.println(e.getMessage());
             return createUser(userId);
         }
     }
@@ -41,11 +40,9 @@ public class UserService {
         userRepository.saveAndFlush(updatedUser);
     }
 
-    public void deleteUser(User user)
+    public void deleteUser(String userId)
     {
-        ArrayList<User> toDelete = new ArrayList<>();
-        toDelete.add(user);
-        userRepository.deleteInBatch(toDelete);
+        userRepository.deleteById(userId);
     }
 
 }

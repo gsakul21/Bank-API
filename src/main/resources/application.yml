@@ -5,8 +5,7 @@ spring:
     driver-class-name: org.sqlite.JDBC
   
 # Hibernate Auto DDL Configuration
-spring:
   jpa:
-    database-platform: org.hibernate.dialect.SQLiteDialect
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update

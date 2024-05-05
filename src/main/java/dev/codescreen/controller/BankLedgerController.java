@@ -3,7 +3,7 @@ package dev.codescreen.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +22,7 @@ public class BankLedgerController {
     @Autowired
     private BankLedgerService bankLedgerService;
 
-    @PostMapping("/authorization")
+    @PutMapping("/authorization")
     public ResponseEntity<?> authorization(@RequestBody AuthorizationRequest authorizationRequest)
     {
         Object authResp = bankLedgerService.authorize(authorizationRequest);
@@ -41,7 +41,7 @@ public class BankLedgerController {
         return ResponseEntity.badRequest().body(authResp);
     }
 
-    @PostMapping("/load")
+    @PutMapping("/load")
     public ResponseEntity<?> load(@RequestBody LoadRequest loadRequest)
     {
         Object loadResp = bankLedgerService.load(loadRequest);
