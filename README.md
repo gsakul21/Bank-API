@@ -43,7 +43,17 @@ Here’s a breakdown of the key criteria we’ll be considering when grading you
 
 # Candidate README
 ## Bootstrap instructions
-*Replace this: To run this server locally, do the following:*
+In order to run the application, you must first have [Apache Maven](https://maven.apache.org) which is a software project management and comprehension tool. If you do not, then please go ahead and install it on your machine first. Once you have installed Maven, then you can clone this repository using
+the method of your choice.
+
+After doing the above, open a terminal and cd into the repository. Now, type the following command:
+
+```
+mvn clean package install spring-boot:run
+```
+
+This will take a couple of seconds, but when you stop receiving output and see "Started Application in X seconds" at the bottom
+of your terminal output, then the service is up and running and you can access the endpoints at "http://localhost:8080/{endpoint}"
 
 ## Design considerations
 *Replace this: I decided to build X for Y reasons.*
