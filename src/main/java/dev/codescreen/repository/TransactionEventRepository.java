@@ -17,7 +17,7 @@ public interface TransactionEventRepository extends JpaRepository<TransactionEve
 
     /**
      * @param userId
-     * @return List<TransactionEvent>
+     * @return List<TransactionEvent>, events related to user with userId
      * 
      * The function takes in a specific userId, corresponding to a User within
      * the service. It returns back all stored load/authorization events that 
