@@ -24,7 +24,11 @@ public class TransactionEvent {
 
     /*
      * A unique identifier for each event such that they can all be stored
-     * in the SQLite DB.
+     * in the SQLite DB. Setup such that it is the primary key for an entry
+     * in the table, and is generated automatically with object creation.
+     * 
+     * Follows one of the GenerationType strategies, for more detail on the
+     * strategy, please view {@link GenerationType}.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +44,7 @@ public class TransactionEvent {
      * Custom Enum to denote and keep track of what actually happened with the
      * load or authorization call. See {@link TransactionStatus} for more
      * information.
+     * Stored as string in database.
      */
     @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus;
@@ -47,6 +52,7 @@ public class TransactionEvent {
     /*
      * As specified in schema, representing if this was a credit or debit
      * transaction. See {@link DebitCredit} for more information.
+     * Stored as string in database.
      */
     @Enumerated(EnumType.STRING)
     private DebitCredit debitOrCredit;
