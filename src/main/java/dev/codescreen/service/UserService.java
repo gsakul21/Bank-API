@@ -1,48 +1,41 @@
 package dev.codescreen.service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+
 import org.springframework.stereotype.Service;
-import dev.codescreen.domain.User;
-import dev.codescreen.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private HashMap<String, HashMap<String, BigDecimal>> userMap;
 
-    public UserService(UserRepository userRepository)
+    public UserService()
     {
-        this.userRepository = userRepository;
+        this.userMap = new HashMap<String, HashMap<String, BigDecimal>>();
     }
 
-    public User findUser(String userId)
+    public HashMap<String, BigDecimal> getBalances(String userId)
     {
-        try
+        if (userMap.containsKey(userId))
         {
-            return userRepository.getReferenceById(userId);
+            return userMap.get(userId);
         }
-        catch(EntityNotFoundException e)
-        {
-            System.out.println(e.getMessage());
-            return createUser(userId);
-        }
+
+        HashMap<String, BigDecimal> balances = new HashMap<>();
+        userMap.put(userId, balances);
+
+        return balances;
     }
 
-    public User createUser(String userId)
+    public void updateBalances(String userId, HashMap<String, BigDecimal> newBalances)
     {
-        User new_user = new User(userId);
-        userRepository.saveAndFlush(new_user);
-        return new_user;
-    }
-
-    public void updateUser(User updatedUser)
-    {
-        userRepository.saveAndFlush(updatedUser);
+        userMap.put(userId, newBalances);
     }
 
     public void deleteUser(String userId)
     {
-        userRepository.deleteById(userId);
+        userMap.remove(userId);
     }
 
 }

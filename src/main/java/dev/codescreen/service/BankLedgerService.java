@@ -2,13 +2,11 @@ package dev.codescreen.service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Map;
+import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.codescreen.domain.TransactionStatus;
-import dev.codescreen.domain.User;
 import dev.codescreen.domain.TransactionEvent;
 import dev.codescreen.repository.*;
 import dev.codescreen.schemas.Amount;
@@ -24,12 +22,12 @@ import dev.codescreen.schemas.ServerError;
 public class BankLedgerService {
     private final TransactionEventRepository transactionEventRepository;
 
-    @Autowired
     private UserService userService;
 
-    public BankLedgerService(TransactionEventRepository transactionEventRepository)
+    public BankLedgerService(TransactionEventRepository transactionEventRepository, UserService userService)
     {
         this.transactionEventRepository = transactionEventRepository;
+        this.userService = userService;
     }
 
     public Object authorize(AuthorizationRequest authorizationRequest)
@@ -37,9 +35,8 @@ public class BankLedgerService {
         try
         {
             Amount authAmount = authorizationRequest.getTransactionAmount();
-            User account = userService.findUser(authorizationRequest.getUserId());
 
-            Map<String, BigDecimal> currentBalances = account.getBalances();
+            HashMap<String, BigDecimal> currentBalances = userService.getBalances(authorizationRequest.getUserId());
 
             String targetCurrency = authAmount.getCurrency();
             BigDecimal targetBalance = new BigDecimal(authAmount.getAmount());
@@ -54,14 +51,15 @@ public class BankLedgerService {
                 authAmount.getAmount(),
                 Instant.now().toString());
 
-                AuthorizationResponse authResp = new AuthorizationResponse(account.getUserId(), authorizationRequest.getMessageId(), 
+                AuthorizationResponse authResp = new AuthorizationResponse(authorizationRequest.getUserId(), authorizationRequest.getMessageId(), 
                 ResponseCode.DECLINED, authAmount);
 
                 return authResp;
             }
             
             currentBalances.put(targetCurrency, currentBalances.get(targetCurrency).subtract(targetBalance));
-            authAmount.setAmount(currentBalances.get(targetCurrency).toString());
+        
+            userService.updateBalances(authorizationRequest.getUserId(), currentBalances);
 
             saveEvent(authorizationRequest.getUserId(),
             authorizationRequest.getMessageId(),
@@ -71,7 +69,9 @@ public class BankLedgerService {
             authAmount.getAmount(),
             Instant.now().toString());
 
-            AuthorizationResponse authResp = new AuthorizationResponse(account.getUserId(), authorizationRequest.getMessageId(), 
+            authAmount.setAmount(currentBalances.get(targetCurrency).toString());
+
+            AuthorizationResponse authResp = new AuthorizationResponse(authorizationRequest.getUserId(), authorizationRequest.getMessageId(), 
             ResponseCode.APPROVED, authAmount);
 
             return authResp;
@@ -88,6 +88,8 @@ public class BankLedgerService {
             authAmount.getAmount(),
             Instant.now().toString());
 
+            e.printStackTrace();
+
             return new ServerError(e.getMessage());
         }
         
@@ -96,11 +98,10 @@ public class BankLedgerService {
     public Object load(LoadRequest loadRequest)
     {
         try
-        {
-            User account = userService.findUser(loadRequest.getUserId());
+        {  
             Amount loadAmount = loadRequest.getTransactionAmount();
 
-            Map<String, BigDecimal> currentBalances = account.getBalances();
+            HashMap<String, BigDecimal> currentBalances = userService.getBalances(loadRequest.getUserId());
 
             String targetCurrency = loadAmount.getCurrency();
             BigDecimal targetBalance = new BigDecimal(loadAmount.getAmount());
@@ -114,8 +115,7 @@ public class BankLedgerService {
                 currentBalances.put(targetCurrency, targetBalance);
             }
 
-            account.setBalance(currentBalances);
-            userService.updateUser(account);
+            userService.updateBalances(loadRequest.getUserId(), currentBalances);
             
             saveEvent(loadRequest.getUserId(),
             loadRequest.getMessageId(),
@@ -141,6 +141,8 @@ public class BankLedgerService {
             loadAmount.getCurrency(),
             loadAmount.getAmount(),
             Instant.now().toString());
+
+            e.printStackTrace();
             
             return new ServerError(e.getMessage());
         }
