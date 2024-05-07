@@ -64,10 +64,11 @@ of your terminal output, then the service is up and running and you can access t
 ## Bonus: Deployment considerations
 Given a service that has a REST API nature such as this one and persists data, most commonly it would be deployed in an environment that can support
 these characteristics. Typically, you would deploy a service such as this on the cloud, a VM, or a physical server itself. In particular, if I were to
-deploy this service I would first package it using Docker so that its a single container that can be run anywhere which gives me flexibility. Then, depending on my use cases and importance I can choose the deploy where to deploy it. I would prefer to deploy it on the cloud using platforms such as Google Cloud, AWS, or Azure since they give me ease and flexibility to work with the service. For example, on GCP I could deploy it using the App Engine or EC2 on AWS.
+deploy this service I would first package it using Docker so that its a single container that can be run anywhere which gives me flexibility. Then, depending on my use cases and importance I can choose the deploy where to deploy it. I would prefer to deploy it on the cloud using platforms such as Google Cloud, AWS, or Azure since they give me ease and flexibility to work with the service. In particular, I would choose to deploy on EC2 on AWS. Observe below:
 
-[Diagram of deployment found online](images/aws.jpg)
-*This image is not my own creation and was found online as thumbnail for a video, [URL](https://www.youtube.com/watch?app=desktop&v=z7_LdCVnCRU)*
+![diagram of deployment on aws](images/aws.jpg)
+
+*This image is not my own creation, it is a thumbnail for a [video](https://www.youtube.com/watch?app=desktop&v=z7_LdCVnCRU).*
 
 ## License
 
