@@ -15,14 +15,12 @@ import dev.codescreen.schemas.LoadResponse;
 import dev.codescreen.service.BankLedgerService;
 
 /*
- * 
  * This is the a controller responsible for handling the /authorization
  * and /load endpoints of our service. It correctly maps the endpoints to their 
  * services responsible for dealing with the expected functionality of the endpoint.
  * 
  * For more detail as to what occurs for each endpoint, scroll further down to
  * learn more.
- * 
  */
 
 @RestController
@@ -55,7 +53,8 @@ public class BankLedgerController {
          */
         if (authResp.getClass() == AuthorizationResponse.class)
         {
-            /* Written under assumption that 201 (Created) is indicating creation
+            /* 
+             * Written under assumption that 201 (Created) is indicating creation
              * of event tracking this request, so it doesn't matter if the
              * authorization request is declined or approved, an event is made.
              */
