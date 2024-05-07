@@ -59,12 +59,17 @@ of your terminal output, then the service is up and running and you can access t
 *Replace this: I decided to build X for Y reasons.*
 
 ## Assumptions
-*Replace this: If you made any assumption in designing the service, document it here*
+One assumption that I made was that the userId is unique and an identifying element of a User. The service is implemented such that trying to perform loads and authorizations with two different users with the same userId would not be possible. I also assumed that when a load request is passed in for a user and they don't exist yet they should be automatically generated with an overall balance of 0 to start with.
+
+Another assumption made was that event sourcing would be necessary for core functionality of the service. As such, the ping feature of the service was not implemented following the pattern.
+
+I also assumed that this service should deal with different currencies itself in some manner but be set up in a way that if additional information is provided, such as conversion rates, user balance could be stored as one singular balance in a chosen currency.
+
 
 ## Bonus: Deployment considerations
 Given a service that has a REST API nature such as this one and persists data, most commonly it would be deployed in an environment that can support
 these characteristics. Typically, you would deploy a service such as this on the cloud, a VM, or a physical server itself. In particular, if I were to
-deploy this service I would first package it using Docker so that its a single container that can be run anywhere which gives me flexibility. Then, depending on my use cases and importance I can choose the deploy where to deploy it. I would prefer to deploy it on the cloud using platforms such as Google Cloud, AWS, or Azure since they give me ease and flexibility to work with the service. In particular, I would choose to deploy on EC2 on AWS. Observe below:
+deploy this service I would first package it using Docker so that its a single container that can be run anywhere which gives me flexibility. Then, depending on my use cases and importance, I can find the best fit for deployment. I would prefer to deploy it on the cloud using platforms such as Google Cloud, AWS, or Azure since they give ease and flexibility in deployment. In particular, I would choose to deploy on AWS using EC2. Observe below:
 
 ![diagram of deployment on aws](images/aws.jpg)
 

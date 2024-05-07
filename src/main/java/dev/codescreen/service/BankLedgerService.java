@@ -66,9 +66,8 @@ public class BankLedgerService {
             BigDecimal targetBalance = new BigDecimal(authAmount.getAmount());
 
             /*
-             * Checks if the user has no money for that currency or if they don't
-             * and returns it as a failed authorization if that is the case and saves
-             * as a failed authorization event.
+             * Checks if the user has enough money in the specified currency. If it doesn't then
+             * saves as a failed authorization event, and returns as a failed authorization
              */
             if (currentBalances.containsKey(targetCurrency) == false || currentBalances.get(targetCurrency).compareTo(targetBalance) < 0)
             {
