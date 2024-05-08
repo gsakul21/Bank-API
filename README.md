@@ -43,38 +43,49 @@ Here’s a breakdown of the key criteria we’ll be considering when grading you
 
 # Candidate README
 ## Bootstrap instructions
-In order to run the application, you must first have [Apache Maven](https://maven.apache.org) which is a software project management and comprehension tool. If you do not, then please go ahead and install it on your machine first. Once you have installed Maven, then you can clone this repository using
-the method of your choice.
+In order to run the application, you must first have [Apache Maven](https://maven.apache.org) installed. If you do not, then please go ahead and install it on your machine first. Once you have installed Maven, then you can clone this repository using the method of your choice.
 
-After doing the above, open a terminal and cd into the repository. Now, type the following command:
+After completing the above, open a terminal and cd into the repository. Now, type the following command:
 
 ```
 mvn clean package install spring-boot:run
 ```
 
-This will take a little bit of time, but when you stop receiving output and see "Started Application in X seconds" somewhat near the bottom right
+This will take a little bit of time, but when you stop receiving output and see "Started Application in X seconds" somewhat near the bottom rightside
 of your terminal output, then the service is up and running and you can access the endpoints at "http://localhost:8080/{endpoint}"
 
 ## Design considerations
 
-When approaching the service, I thought about providing the specified functionality but also building the service in a way that it is reliable, scalable and has good performance. That is why I constructed it using Spring Boot, a framework that is great for making web services since it aids in abstracting the very granular tasks such as server setup and deployment, endpoint routing, etc. and allows for implementation of macro level features. This would make it very easy to build upon the existing service and add more features since it provides a structure to do so.
+Certainly! Here's a revised version focusing solely on the service itself:
 
-Additionally, while considering the idea of expansion and adaptability, I built the service to follow the flow of a layered design pattern. That way, a new feature could be easily integrated if it is broken down into different layers. This added a degree of modularity to the service, aiding in that goal. This led to me following a very common architecture for RESTful API services: having a controller layer, service layer, and finally a repository layer (if necessary). 
+---
 
-The communication between these layers was done using objects that matched the specific schemas, thus ensuring that input-output was done as per what the service specification file (service.yml) requested making sure that it is reliable and correct performance. Additionally, given the modularity and design scheme, this allowed for testing on a much more granular level which also helped in ensuring that it is reliable.
+In conceptualizing and developing the service, a focus was placed on delivering both functionality and a robust architecture, emphasizing reliability, scalability, and performance. To achieve these goals, Spring Boot was selected as the framework of choice, renowned for its ability to simplify web service development and abstract tedious tasks like server setup and routing, allowing a concentration on higher-level features.
 
-I also grouped the features in a manner that if there was a need to build out more specific user functionality and would want to implement reconstruction of an account state up to a certain point the structure was there to do so and could be done pretty easily.
+Embracing a layered design pattern played a crucial role in ensuring scalability and maintainability. A modified Model-View-Controller (MVC) approach was adopted, with distinct controller, service, and repository layers, enabling clear separation of concerns and establishing a foundation for seamless integration of future enhancements.
 
-When focusing on storing data, I opted to have two different data stores. For the users, I chose to use an in-memory store for faster access and given that it could be much more likely that someone would want to know their current balance more often than their balance at a specific point in time. Also, the expansion of that data was not at such a rate that it would require a client-server database just yet. Thus the reading and writing would be done very quickly ensuring performance. On the other hand, I opted for a more scalable solution when thinking about storing the transactions. Given the nature of the service, it was much more likely that this would accumulate much faster and take up more space quicker, as such there needed to be a scalable solution to this. I ended up opting for SQLite database since it is self-contained, severless, and transactional allowing it to be easy to setup and deploy while still being persistent, scalable and fast. This would mean that even if users are stored in an in-memory object they could be reconstructed using the event storage thus making them persistent in some regard. Also, given the way that the project is setup and using Spring Boot, it is very simple to switch solutions given the support Spring Boot provides making it very plug and play.
+A meticulous data storage strategy was imperative, taking into account the unique requirements for user and transaction data. For users, an in-memory store was chosen to prioritize quick access and responsiveness. Conversely, SQLite was selected for transactions due to its scalability and transactional capabilities, ensuring persistent and efficient storage.
 
-Getting a bit more specific, I stored user balances as a map from currencies to make sure that different currency transactions are supported to some extent without fully depending on external context such as conversion rates. However, it is still written a way that if there are provided rates than the different amounts for the various currencies stored for the user can be easily converted and stored as a singular value. 
+In addressing currency handling, a flexible solution was devised by storing user balances as currency maps. This approach accommodates multiple currencies without reliance on external conversion rates, preserving flexibility for future enhancements, such as incorporating exchange rate functionality.
+
+Modularity and testability were paramount considerations throughout the design process. Breaking down functionality into granular components enhanced both test coverage and maintenance ease, facilitating seamless addition or modification of features while safeguarding existing functionality.
+
+Moreover, meticulous scoping ensured security and data privacy. Sensitive data was encapsulated within private attributes, with access meticulously controlled via getters and setters, fortifying the service against potential security threats.
+
+In essence, the service's design embodies a meticulous balance of functionality and architecture, leveraging the capabilities of Spring Boot, adhering to best practices, and making informed decisions about data management and security. This approach ensures readiness for both current needs and future growth.
+
+Here is a diagram of the service as well:
+
+
+
+
 
 
 ## Assumptions
 
-One assumption that I made was that the userId is unique and an identifying element of a User. The service is implemented such that trying to perform loads and authorizations with two different users with the same userId would not be possible. I also assumed that when a load request is passed in for a user and they don't exist yet they should be automatically generated with an overall balance of 0 to start with.
+One assumption that I made was that the userId is unique and an identifying element of a User. The service is implemented such that trying to perform loads and authorizations with two different users with the same userId would not be possible. I also assumed that when a load request is passed in for a user and they don't exist yet they should be automatically generated with an overall balance of 0 to start with, essentially abstracting away the user/account creation process.
 
-Another assumption made was that event sourcing would be necessary for core functionality of the service, essentially only for a transaction since that is what was mentioned in the objective. As such, the ping feature of the service was not implemented following the pattern and user creation/deletion is not tracked in the transaction history either.
+Another assumption made was that event sourcing should be applied only to the core functionality of the service, essentially only for transactions since that is what was mentioned in the objective (building a transaction history). As such, calls to /ping are not saved as events and user/account management isn't either. 
 
 I also assumed that this service should deal with different currencies itself in some manner but be set up in a way that if additional information is provided, such as conversion rates, user balance could be stored as one singular balance in a chosen currency.
 
