@@ -72,7 +72,7 @@ In essence, the service's design embodies a meticulous balance of functionality 
 
 Here is a diagram of the service as well:
 
-
+![Diagram of service design.](images/current_arch_diagram.png)
 
 
 
