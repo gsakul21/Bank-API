@@ -52,13 +52,12 @@ After doing the above, open a terminal and cd into the repository. Now, type the
 mvn clean package install spring-boot:run
 ```
 
-This will take a couple of seconds, but when you stop receiving output and see "Started Application in X seconds" at the bottom
+This will take a little bit of time, but when you stop receiving output and see "Started Application in X seconds" somewhat near the bottom right
 of your terminal output, then the service is up and running and you can access the endpoints at "http://localhost:8080/{endpoint}"
 
 ## Design considerations
-*Replace this: I decided to build X for Y reasons.*
 
-When approaching the service, I thought about providing the specified functionality but also building the service in a way that it is reliable, scalable and has good performance. That is why I constructed it using Spring Boot, a framework that is great for making web services since it aids in abstracting the very granular tasks and allows for implementation of macro level features. This would make it very easy to build upon the existing service and add more features since it provides a structure to do so.
+When approaching the service, I thought about providing the specified functionality but also building the service in a way that it is reliable, scalable and has good performance. That is why I constructed it using Spring Boot, a framework that is great for making web services since it aids in abstracting the very granular tasks such as server setup and deployment, endpoint routing, etc. and allows for implementation of macro level features. This would make it very easy to build upon the existing service and add more features since it provides a structure to do so.
 
 Additionally, while considering the idea of expansion and adaptability, I built the service to follow the flow of a layered design pattern. That way, a new feature could be easily integrated if it is broken down into different layers. This added a degree of modularity to the service, aiding in that goal. This led to me following a very common architecture for RESTful API services: having a controller layer, service layer, and finally a repository layer (if necessary). 
 
@@ -71,18 +70,17 @@ When focusing on storing data, I opted to have two different data stores. For th
 Getting a bit more specific, I stored user balances as a map from currencies to make sure that different currency transactions are supported to some extent without fully depending on external context such as conversion rates. However, it is still written a way that if there are provided rates than the different amounts for the various currencies stored for the user can be easily converted and stored as a singular value. 
 
 
-
 ## Assumptions
+
 One assumption that I made was that the userId is unique and an identifying element of a User. The service is implemented such that trying to perform loads and authorizations with two different users with the same userId would not be possible. I also assumed that when a load request is passed in for a user and they don't exist yet they should be automatically generated with an overall balance of 0 to start with.
 
-On the flip side, I made the assumption that it could be that case that the message id associated with a request to the service is not unique.
-
-Another assumption made was that event sourcing would be necessary for core functionality of the service. As such, the ping feature of the service was not implemented following the pattern.
+Another assumption made was that event sourcing would be necessary for core functionality of the service, essentially only for a transaction since that is what was mentioned in the objective. As such, the ping feature of the service was not implemented following the pattern and user creation/deletion is not tracked in the transaction history either.
 
 I also assumed that this service should deal with different currencies itself in some manner but be set up in a way that if additional information is provided, such as conversion rates, user balance could be stored as one singular balance in a chosen currency.
 
 
-## Bonus: Deployment considerations
+## Bonus: Deployment consideration
+
 Given a service that has a REST API nature such as this one and persists data, most commonly it would be deployed in an environment that can support
 these characteristics. Typically, you would deploy a service such as this on the cloud, a VM, or a physical server itself. In particular, if I were to
 deploy this service I would first package it using Docker so that its a single container that can be run anywhere which gives me flexibility. Then, depending on my use cases and importance, I can find the best fit for deployment. I would prefer to deploy it on the cloud using platforms such as Google Cloud, AWS, or Azure since they give ease and flexibility in deployment. In particular, I would choose to deploy on AWS using EC2. Observe below:

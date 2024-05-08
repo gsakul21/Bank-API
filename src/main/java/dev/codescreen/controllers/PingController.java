@@ -1,4 +1,4 @@
-package dev.codescreen.controller;
+package dev.codescreen.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,25 +33,9 @@ public class PingController {
      * 
      */
     @GetMapping("/ping")
-    public ResponseEntity<?> ping()
+    public ResponseEntity<Ping> ping()
     {
-        // Call to PingService.
-        Object pingResp = pingService.ping();
-
-        /*
-         * Checking if it is either a Ping response which indicates a successful
-         * call, or a ServerError which means something went wrong. Formats
-         * ResponseEntity as either 200 (Ok) or 400 (Bad Request) accordingly.
-         */
-
-        if (pingResp.getClass() == Ping.class)
-        {
-            Ping response = (Ping) pingResp;
-
-            return ResponseEntity.ok().body(response);
-        }
-
-        return ResponseEntity.badRequest().body(pingResp);
+        return ResponseEntity.ok().body(pingService.ping());
     }
 
 }

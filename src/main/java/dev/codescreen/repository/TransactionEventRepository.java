@@ -13,7 +13,7 @@ import dev.codescreen.domain.TransactionEvent;
  * generated Long. For more details in regard to that, please view {@link TransactionEvent}.
  */
 
-public interface TransactionEventRepository extends JpaRepository<TransactionEvent, Long> {
+public interface TransactionEventRepository extends JpaRepository<TransactionEvent, String> {
 
     /**
      * @param userId

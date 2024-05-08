@@ -58,6 +58,11 @@ public class BankLedgerService {
             // Get the specifics of the requested authorization.
             Amount authAmount = authorizationRequest.getTransactionAmount();
 
+            if (authAmount.getDebitOrCredit() != DebitCredit.DEBIT)
+            {
+                throw new Exception("Invalid DebitCredit Input");
+            }
+
             // Get the current balance of the user for the specific currency
             HashMap<String, BigDecimal> currentBalances = userService.getBalances(authorizationRequest.getUserId());
 
@@ -78,6 +83,9 @@ public class BankLedgerService {
                 authAmount.getCurrency(),
                 authAmount.getAmount(),
                 Instant.now().toString());
+
+                String newAmt = currentBalances.containsKey(targetCurrency) ? currentBalances.get(targetCurrency).toString() : "0";
+                authAmount.setAmount(newAmt);
 
                 AuthorizationResponse authResp = new AuthorizationResponse(authorizationRequest.getUserId(), authorizationRequest.getMessageId(), 
                 ResponseCode.DECLINED, authAmount);
@@ -142,6 +150,11 @@ public class BankLedgerService {
         {              
             // Get the specifics of the requested load.
             Amount loadAmount = loadRequest.getTransactionAmount();
+
+            if (loadAmount.getDebitOrCredit() != DebitCredit.CREDIT)
+            {
+                throw new Exception("Invalid DebitCredit Input");
+            }
 
             // Retrieve the current balances of the user.
             HashMap<String, BigDecimal> currentBalances = userService.getBalances(loadRequest.getUserId());

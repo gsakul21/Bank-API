@@ -1,5 +1,8 @@
 package dev.codescreen.schemas;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Size;
+
 /*
  * Base class for errors in the Service. Contains common required information of
  * an error.
@@ -9,7 +12,11 @@ package dev.codescreen.schemas;
 public abstract class Error {
 
     // Error message and code (if applicable)
+    @Size(min = 1)
     public String message;
+
+    @Nullable
+    @Size(min = 1)
     public String code;
 
     // Potential constructors, designed such that code is optional.

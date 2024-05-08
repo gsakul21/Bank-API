@@ -1,5 +1,6 @@
 package dev.codescreen.schemas;
 
+import jakarta.validation.constraints.NotNull;
 /*
  * Implementation of the AuthorizationResponse schema utilized by the service
  * in the "/authorization" endpoint, as specified in the service outline. 
@@ -14,6 +15,7 @@ public class AuthorizationResponse extends Response {
      * Indication of how the request went. See {@link ResponseCode} for more
      * details.
      */
+    @NotNull
     private ResponseCode response;
 
     public AuthorizationResponse(String userId, String messageId, ResponseCode response, Amount balance)

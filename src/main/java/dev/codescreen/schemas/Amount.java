@@ -1,5 +1,8 @@
 package dev.codescreen.schemas;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 /*
  * As defined in the provided service specification file, object representing the 
  * Amount schema. Contains key details for a load or authorization request pertaining
@@ -8,13 +11,21 @@ package dev.codescreen.schemas;
 public class Amount {
 
     // The amount being requested as well as its currency.
+    @NotNull
+    @NotEmpty
+    @Size(min = 1)
     private String amount;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 1)
     private String currency;
 
     /*
      * Enumerated type specifying what type of transaction is requested. See
      * {@link DebitCredit} for more details. 
      */
+    @NotNull
     private DebitCredit debitOrCredit;
 
     public Amount(String amount, String currency, DebitCredit debitOrCredit)

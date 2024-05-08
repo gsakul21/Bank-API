@@ -1,5 +1,10 @@
 package dev.codescreen.schemas;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 /*
  * Base form of a response object in the API. Utilized to return information
  * from a related service after it is done processing the input (a request). 
@@ -15,10 +20,19 @@ public abstract class Response {
      * and the message id of the request, as well as the balance of the user
      * after processing the request.
      */
+    @Size(min = 1)
+    @NotEmpty
+    @NotNull
     private String userId;
+
+    @Size(min = 1)
+    @NotEmpty
+    @NotNull
     private String messageId;
 
     // To learn more about this attribute, please refer to {@link Amount}
+    @NotNull
+    @Valid
     private Amount balance;
 
     public Response(String userId, String messageId, Amount balance)

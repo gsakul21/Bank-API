@@ -1,4 +1,4 @@
-package dev.codescreen.controller;
+package dev.codescreen.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import dev.codescreen.schemas.AuthorizationRequest;
 import dev.codescreen.schemas.AuthorizationResponse;
 import dev.codescreen.schemas.LoadRequest;
 import dev.codescreen.schemas.LoadResponse;
 import dev.codescreen.service.BankLedgerService;
+import jakarta.validation.Valid;
 
 /*
  * This is the a controller responsible for handling the /authorization
@@ -40,7 +42,7 @@ public class BankLedgerController {
      * a ServerError object detailing what went wrong.
      */
     @PutMapping("/authorization")
-    public ResponseEntity<?> authorization(@RequestBody AuthorizationRequest authorizationRequest)
+    public ResponseEntity<?> authorization(@Valid @RequestBody AuthorizationRequest authorizationRequest)
     {
 
         // Calls the service responsible for handling fund authorization
@@ -78,7 +80,7 @@ public class BankLedgerController {
      * 
      */
     @PutMapping("/load")
-    public ResponseEntity<?> load(@RequestBody LoadRequest loadRequest)
+    public ResponseEntity<?> load(@Valid @RequestBody LoadRequest loadRequest)
     {
         // Calls the service responsible for loading funds to a user.  
         Object loadResp = bankLedgerService.load(loadRequest);

@@ -6,8 +6,6 @@ import dev.codescreen.schemas.DebitCredit;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /*
@@ -22,23 +20,18 @@ import jakarta.persistence.Id;
 @Entity
 public class TransactionEvent {
 
+
+
     /*
-     * A unique identifier for each event such that they can all be stored
-     * in the SQLite DB. Setup such that it is the primary key for an entry
-     * in the table, and is generated automatically with object creation.
-     * 
-     * Follows one of the GenerationType strategies, for more detail on the
-     * strategy, please view {@link GenerationType}.
+     * Message ID passed in with request, since it is unique to the message and
+     * every event is essentialy associated with one message, this will be the
+     * unique identifier of an event.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String messageId;
 
     // The involved user for the transaction event
     private String userId;
-
-    // Message ID passed in with request
-    private String messageId;
 
     /*
      * Custom Enum to denote and keep track of what actually happened with the
@@ -87,14 +80,6 @@ public class TransactionEvent {
     }
 
     // Getters and setters for various fields of the event object.
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
