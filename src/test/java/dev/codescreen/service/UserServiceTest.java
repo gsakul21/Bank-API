@@ -11,6 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/*
+ * This test suite primarily focuses on the UserService, which is centered around
+ * interacting with the in-memory object that stores the user balances in the 
+ * present.
+ */
+
 @SpringBootTest
 public class UserServiceTest {
 

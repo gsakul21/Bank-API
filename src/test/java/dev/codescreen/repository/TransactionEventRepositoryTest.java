@@ -19,7 +19,16 @@ import dev.codescreen.domain.TransactionEvent;
 import dev.codescreen.domain.TransactionStatus;
 import dev.codescreen.schemas.DebitCredit;
 
+/*
+ * This test suite focuses on integration and functionality with the 
+ * JPARepository, which in this cases utilizes Hibernate and SQLite.
+ */
 
+/*
+ * Configuring the properties of the testing environment, Spring Boot tests in
+ * an embedded, in-memory database so need to use that for this option to work.
+ * Thus, configuring H2 for testing.
+ */
 @DataJpaTest(
     properties = {
         "spring.datasource.url=jdbc:h2:mem:testdb",
@@ -37,6 +46,11 @@ public class TransactionEventRepositoryTest {
 
     private TransactionEvent transactionEvent;
 
+    /*
+     * Before each database transaction test, runs this and inserts an event entry
+     * into the database
+     */
+
     @BeforeEach
     public void setUp()
     {
@@ -53,12 +67,23 @@ public class TransactionEventRepositoryTest {
         transactionEventRepository.saveAndFlush(transactionEvent);
     }
 
+    /*
+     * After the specific test, deletes the entry that was added before the
+     * test from the database. Essentially cleaning up the database for the
+     * next test.
+     */
+
     @AfterEach
     public void clear()
     {
         transactionEventRepository.delete(transactionEvent);
     }
 
+    /*
+     * Checking the specific transaction event lookup functionality. Given
+     * the messageId pertaining to a specific message, can we get the event related
+     * to that image.
+     */
     @Test
     void findTransactionByUniqueId()
     {
@@ -73,6 +98,11 @@ public class TransactionEventRepositoryTest {
         assertEquals(transactionEvent.getAmount(), loaded.getAmount());
         assertEquals(transactionEvent.getTimeOfEvent(), loaded.getTimeOfEvent());
     }
+
+    /*
+     * Checking to make sure that we are able to add to the database without
+     * any issues.
+     */
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
@@ -90,6 +120,12 @@ public class TransactionEventRepositoryTest {
 
         transactionEventRepository.saveAndFlush(transactionEventNumTwo);
     }
+
+    /*
+     * Testing feature that retrieves all TransactionEvents associated with a
+     * specific userId. Essentially the entire transaction history of a particular
+     * user.
+     */
 
     @Test
     void allTransactionsForUser()
