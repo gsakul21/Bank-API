@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.codescreen</groupId>
-    <artifactId>CodeScreen_p8foqex5</artifactId>
+    <groupId>dev</groupId>
+    <artifactId>Bank_API</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -145,7 +145,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>dev.codescreen.Application</mainClass>
+                    <mainClass>dev.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>
